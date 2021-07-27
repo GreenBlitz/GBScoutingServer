@@ -1,3 +1,5 @@
+PIN = 0
+
 import sqlite3
 
 conn_users = curs_users = None
