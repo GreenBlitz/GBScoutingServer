@@ -5,4 +5,4 @@ from app import server
 
 @server.route('/admin')
 def admin():
-    return 'admin' #render_template('admin/admin.html')
+    return 'GBAdmin' #render_template('admin/admin.html')

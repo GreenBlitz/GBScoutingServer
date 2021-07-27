@@ -4,4 +4,4 @@ from flask import request
 
 @server.route('/', methods=['GET', 'POST'])
 def index():
-    return 'scouter' # render_template('home/home.html')
+    return 'GBHome' # render_template('home/home.html')
