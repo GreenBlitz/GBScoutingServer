@@ -1,37 +1,57 @@
+import sqlite3
 PIN = 0
 
-import sqlite3
 
-conn_users = curs_users = None
-conn_scouting_data = curs_scouting_data = None
+def create_scouting_table(curs, values_data_types):
+    sql = """ CREATE TABLE IF NOT EXISTS  (
+                            id integer PRIMARY KEY,
+                            timestamp time,
+                            uname text,
+                            game text,
+                            team integer,
+
+                        );
+                        """
+    for key in values_data_types.keys():
+        sql += key + ' ' + values_data_types[key] + ','
+    curs.execute(sql)
+
+
+game_2020 = {
+    "autonomous_balls": "integer",
+    "cycles": "integer",
+    "balls_per_cycle": "integer",
+    "climbed?": "integer",
+    "color_wheel": "integer"
+}
+
+conn = curs = None
 
 try:
-    conn_users = sqlite3.connect("test.db")
-    curs_users = conn_users.cursor()
-    curs_users.execute(""" CREATE TABLE IF NOT EXISTS  users(
+    conn = sqlite3.connect("Scouting_server_DB.db")
+    curs = conn.cursor()
+    curs.execute(""" CREATE TABLE IF NOT EXISTS  users(
                         id integer PRIMARY KEY,
                         name text,
                         role text,
-                        PIN numeric (9,0),
-                        pass text
+                        psw text
                         );
                         """)
 
-    conn_scouting_data = sqlite3.connect("scouting_data.db")
-    curs_scouting_data = conn_users.cursor()
-    curs_scouting_data.execute(""" CREATE TABLE IF NOT EXISTS  users(
-                            timestamp time
-                        );
-                        """)
+    create_scouting_table(curs, game_2020)
 
 
 except sqlite3.Error as e:
     print(e)
 
-from flask import Flask
-server = Flask(__name__)
 
+
+
+from flask import Flask
+
+server = Flask(__name__)
 
 from app import views
 from app import admin_views
 from app import login_views
+from app import scouter_views
