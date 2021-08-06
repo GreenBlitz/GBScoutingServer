@@ -1,34 +1,18 @@
-
+import sqlite3
 ID = 0
 PIN = ''
 NAME = ''
 ROLE = ''
-import sqlite3
 
 
-
-
-def create_scouting_table(values_data_types):
-    sql = """ CREATE TABLE if not exists team_game(
-                id integer PRIMARY KEY,
-                timestamp time,
-                username text,
-                game text,
-                team integer"""
-
-    for key in values_data_types.keys():
-        sql += ',\n' + key + ' ' + values_data_types[key]
-    sql += ');'
-    return sql
-
-
-game_2020 = {
-    "autonomous_balls": "integer",
-    "cycles": "integer",
-    "balls_per_cycle": "integer",
-    "climbed": "integer",
-    "color_wheel": "integer"
+game_rules = {
+    "autonomous_balls": ("integer", "avg"),
+    "cycles": ("integer", "avg"),
+    "balls_per_cycle": ("", "avg"),
+    "climbed": ("integer", "max"),
+    "color_wheel": ("integer", "max")
 }
+
 
 conn = curs = None
 
@@ -42,7 +26,28 @@ try:
                         psw text
                         );
                         """)
-    curs.execute(create_scouting_table(game_2020))
+
+    sql = """ CREATE TABLE if not exists team_game(
+                id integer PRIMARY KEY,
+                timestamp time,
+                username text,
+                game text,
+                team integer"""
+
+    for key in game_rules.keys():
+        sql += ',\n' + key + ' ' + game_rules[key][0]
+    sql += ');'
+    curs.execute(sql)
+    sql = """ CREATE TABLE if not exists team(
+                id integer PRIMARY KEY,
+                team integer
+                num_of_games integer"""
+
+    for key in game_rules.keys():
+        sql += ',\n' + key + ' ' + game_rules[key][0]
+    sql += ');'
+    curs.execute(sql)
+
     conn.close()
 
 except sqlite3.Error as e:
