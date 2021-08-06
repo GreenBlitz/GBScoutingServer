@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Orel's additions' pleas check before run
+.idea/workspace.xml
