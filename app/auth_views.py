@@ -35,7 +35,7 @@ def register_from_device():
 
     data = ID, ROLE, NAME, psw
 
-    conn = sqlite3.connect("db.db")
+    conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
     curs.execute("""
             INSERT INTO users(id, name, role, psw)

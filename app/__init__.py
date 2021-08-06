@@ -33,7 +33,7 @@ game_2020 = {
 conn = curs = None
 
 try:
-    conn = sqlite3.connect("Scouting_server_DB.db")
+    conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
     curs.execute(""" CREATE TABLE if not exists users(
                         id integer PRIMARY KEY,

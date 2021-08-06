@@ -6,14 +6,14 @@ import sqlite3
 
 @server.route('/scouting', methods=['GET', 'POST'])
 def add_data():
-    # params = request.args
-    # id = params.get('id')
-    # password = params.get('password')
+    params = request.args
+    id = params.get('id')
+    password = params.get('password')
     try:
-        conn = sqlite3.connect("Scouting_server_DB.db")
+        conn = sqlite3.connect("Server.db")
         curs = conn.cursor()
-        # if password != curs.execute("SELECT psw FROM users WHERE id=?", (id)).fetchone():
-        #     return #error code
+        if password != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone():
+            return "username or password does not exist", 401
         if request.method == 'POST':
             json = request.get_json()
             sql1 = "INSERT INTO team_game ("
@@ -25,7 +25,6 @@ def add_data():
                 sql1 = sql1[:-2]
                 sql2 = sql2[:-2]
             sql = sql1 + sql2 + ');'
-            print(sql)
             curs.execute(sql)
             conn.commit()
             conn.close()
