@@ -9,7 +9,7 @@ import sqlite3
 def add_data():
     params = request.args
     id = params.get('id')
-    password = params.get('password')
+    password = params.get('psw')
     try:
         conn = sqlite3.connect("Server.db")
         curs = conn.cursor()
@@ -62,3 +62,5 @@ def add_data():
     except sqlite3.Error as e:
         print(e)
         return "Error"
+
+    return 'Sorry, for some reason we could not find what you searched for', 404
