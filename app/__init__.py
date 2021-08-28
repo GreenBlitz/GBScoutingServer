@@ -1,18 +1,20 @@
 import sqlite3
+
+from utils import data_types
+
 ID = 0
 PIN = ''
 NAME = ''
 ROLE = ''
 
-
 game_rules = {
-    "autonomous_balls": ("integer", "avg"),
-    "cycles": ("integer", "avg"),
-    "balls_per_cycle": ("", "avg"),
-    "climbed": ("integer", "max"),
-    "color_wheel": ("integer", "max")
+    "auto_balls": ("double", data_types.Countable),
+    "tele_balls": ("double", data_types.Countable),
+    "cycles": ("double", data_types.Countable),
+    "color_wheel_1": ("double", data_types.Boolean),
+    "color_wheel_2": ("double", data_types.Boolean),
+    "climb": ("double", data_types.Boolean)
 }
-
 
 conn = curs = None
 
@@ -44,7 +46,7 @@ try:
                 num_of_games integer"""
 
     for key in game_rules.keys():
-        sql += ',\n' + key + ' ' + game_rules[key][0]
+        sql += ',\n' + game_rules[key][1].sql_types(key) + ' '
     sql += ');'
     curs.execute(sql)
 
@@ -52,9 +54,6 @@ try:
 
 except sqlite3.Error as e:
     print(e)
-
-
-
 
 from flask import Flask
 
@@ -64,3 +63,4 @@ from app import views
 from app import admin_views
 from app import auth_views
 from app import scouter_views
+from app import coach_views
