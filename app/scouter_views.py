@@ -1,5 +1,5 @@
 from app import server
-from app import game_rules
+from app import game_rules_2020
 from flask import render_template
 from flask import request
 import sqlite3
@@ -8,7 +8,6 @@ import sqlite3
 @server.route('/scouter/send', methods=['GET', 'POST'])
 def add_data():
     params = request.args
-    print("PARAMS: " + params.__str__())
     id = params.get('id')
     password = params.get('psw')
     try:

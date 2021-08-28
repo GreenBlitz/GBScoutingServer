@@ -1,5 +1,5 @@
 from app import server
-from app import game_rules
+from app import game_rules_2020
 from flask import request, jsonify
 import sqlite3
 

@@ -2,18 +2,17 @@ import sqlite3
 
 from utils import data_types
 
-ID = 0
 PIN = ''
 NAME = ''
 ROLE = ''
 
-game_rules = {
-    "auto_balls": ("double", data_types.Countable),
-    "tele_balls": ("double", data_types.Countable),
-    "cycles": ("double", data_types.Countable),
-    "color_wheel_1": ("double", data_types.Boolean),
-    "color_wheel_2": ("double", data_types.Boolean),
-    "climb": ("double", data_types.Boolean)
+game_rules_2020 = {
+    "auto_balls": data_types.Countable,
+    "tele_balls": data_types.Countable,
+    "cycles": data_types.Countable,
+    "color_wheel_1": data_types.Boolean,
+    "color_wheel_2": data_types.Boolean,
+    "climb": data_types.Boolean
 }
 
 conn = curs = None
@@ -36,17 +35,16 @@ try:
                 game text,
                 team integer"""
 
-    for key in game_rules.keys():
-        sql += ',\n' + key + ' ' + game_rules[key][0]
+    for key in game_rules_2020.keys():
+        sql += ',\n' + game_rules_2020[key].this_type(key)
     sql += ');'
     curs.execute(sql)
     sql = """ CREATE TABLE if not exists team(
                 id integer PRIMARY KEY,
-                team integer
-                num_of_games integer"""
+                team integer"""
 
-    for key in game_rules.keys():
-        sql += ',\n' + game_rules[key][1].sql_types(key) + ' '
+    for key in game_rules_2020.keys():
+        sql += ',\n' + game_rules_2020[key].overview_types(key) + ' '
     sql += ');'
     curs.execute(sql)
 

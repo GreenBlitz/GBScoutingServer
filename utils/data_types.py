@@ -14,11 +14,15 @@ class Countable:
         return self.avg, self.amount, self.max
 
     @staticmethod
-    def sql_types(name):
+    def overview_types(name):
         return f"""{name}_amount integer,
         {name}_avg double,
         {name}_max double
         """
+
+    @staticmethod
+    def this_type(name):
+        return f"{name} integer"
 
 
 class Boolean:
@@ -37,39 +41,36 @@ class Boolean:
         return self.avg, self.amount, self.last
 
     @staticmethod
-    def sql_types(name):
+    def overview_types(name):
         return f"""{name}_amount integer,
             {name}_avg double,
             {name}_last double
             """
 
     @staticmethod
-    def sql_insert(name):
-        return f"""{name}_amount integer,
-                {name}_avg double,
-                {name}_last double
-                """
+    def this_type(name):
+        return f"{name} boolean"
 
 
-class MetaData:
-    def __init__(self, team, win=0, amount=0, comments=[], game_list=[]):
-        self.team = team
-        self.win = win
-        self.amount = amount
-        self.comments = comments
-        self.game_list = game_list
-
-    def add(self, win, comment, game):
-        self.win = self.win * self.amount + win
-        self.amount += 1
-        self.win = self.win / self.amount
-        if comment:
-            self.comments.append(comment)
-        if game:
-            self.game_list.append(game)
-
-    def split(self):
-        return self.team, self.amount, self.amount, self.comments, self.game_list
+#class MetaData:
+#    def __init__(self, team, win=0, amount=0, comments=[], game_list=[]):
+#        self.team = team
+#        self.win = win
+#        self.amount = amount
+#        self.comments = comments
+#        self.game_list = game_list
+#
+#     def add(self, win, comment, game):
+#         self.win = self.win * self.amount + win
+#         self.amount += 1
+#         self.win = self.win / self.amount
+#         if comment:
+#             self.comments.append(comment)
+#         if game:
+#             self.game_list.append(game)
+#
+#     def split(self):
+#         return self.team, self.amount, self.amount, self.comments, self.game_list
 
 
 

@@ -1,11 +1,11 @@
 from flask import request, jsonify
 from app import server
 import random
-from app import PIN, ID, NAME, ROLE
+from app import PIN, NAME, ROLE
 import sqlite3
 import json
 
-MASTER_PASS = "CyberTeamRulesXOXOXOX<3"
+MASTER_PASS_HASHED = "8c8f7c9c5b2194fb60ac6f8847bfe9145a67a006245f39ee8a8901ae776f98f0"
 
 @server.route('/auth/add', methods=['GET', 'POST'])
 def register_user():
@@ -24,7 +24,6 @@ def register_user():
 
 @server.route('/auth/register', methods=['GET', 'POST'])
 def register_from_device():
-    global ID
     global NAME
     global ROLE
     global PIN
@@ -39,14 +38,12 @@ def register_from_device():
     if PIN != pin:
         return f'PIN was incorrect (Original PIN was {PIN}', 401
 
-    ID += 1
-
-    data = ID, NAME, ROLE, psw
-
-    print('(id role name psw ) ', data)
-
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
+    curs.execute('SELECT MAX(id) from users')
+    ID = (curs.fetchone()[0] if curs.rowcount != 0 else 0) + 1
+    data = ID, NAME, ROLE, psw
+    print('(id role name psw ) ', data)
     curs.execute("""
             INSERT INTO users(id, name, role, psw)
             VALUES(?,?,?,?)                   
