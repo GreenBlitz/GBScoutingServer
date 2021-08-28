@@ -10,8 +10,8 @@ class Countable:
         self.max = num if self.max<num else self.max
         self.avg = self.avg/self.amount
 
-    def split(self):
-        return self.avg, self.amount, self.max
+    def split(self, name):
+        return f"{name}_avg", self.avg, f"{name}_amount", self.amount, f"{name}_max", self.max
 
     @staticmethod
     def overview_types(name):
@@ -23,6 +23,13 @@ class Countable:
     @staticmethod
     def this_type(name):
         return f"{name} integer"
+
+    @staticmethod
+    def recreate(name, cursor, table, where):
+        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}")
+        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}")
+        max = cursor.execute(f"SELECT {name}_max FROM {table} WHERE {where}")
+        return Countable(amount, avg, max)
 
 
 class Boolean:
@@ -37,8 +44,8 @@ class Boolean:
         self.last = num
         self.avg = self.avg / self.amount
 
-    def split(self):
-        return self.avg, self.amount, self.last
+    def split(self, name):
+        return f"{name}_avg", self.avg, f"{name}_amount", self.amount, f"{name}_last", self.last
 
     @staticmethod
     def overview_types(name):
@@ -50,6 +57,13 @@ class Boolean:
     @staticmethod
     def this_type(name):
         return f"{name} boolean"
+
+    @staticmethod
+    def recreate(name, cursor, table, where):
+        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}")
+        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}")
+        last = cursor.execute(f"SELECT {name}_last FROM {table} WHERE {where}")
+        return Boolean(amount, avg, last)
 
 
 #class MetaData:

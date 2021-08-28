@@ -30,10 +30,11 @@ try:
 
     sql = """ CREATE TABLE if not exists team_game(
                 id integer PRIMARY KEY,
-                timestamp time,
+                timestamp datetime,
                 username text,
                 game text,
-                team integer"""
+                team integer,
+                comments text"""
 
     for key in game_rules_2020.keys():
         sql += ',\n' + game_rules_2020[key].this_type(key)

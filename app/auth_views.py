@@ -7,6 +7,7 @@ import json
 
 MASTER_PASS_HASHED = "8c8f7c9c5b2194fb60ac6f8847bfe9145a67a006245f39ee8a8901ae776f98f0"
 
+
 @server.route('/auth/add', methods=['GET', 'POST'])
 def register_user():
     global PIN
