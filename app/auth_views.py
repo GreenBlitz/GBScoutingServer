@@ -42,7 +42,12 @@ def register_from_device():
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
     curs.execute('SELECT MAX(id) from users')
-    ID = (curs.fetchone()[0] if curs.rowcount != 0 else 0) + 1
+
+    data = curs.fetchone()
+
+    print(f'DATA: {data}')
+
+    ID = (data[0] + 1 if data[0] else 1)
     data = ID, NAME, ROLE, psw
     print('(id role name psw ) ', data)
     curs.execute("""
@@ -53,4 +58,4 @@ def register_from_device():
     conn.commit()
     conn.close()
 
-    return jsonify(id=ID, name=NAME, role=ROLE)
+    return jsonify(uid=ID, name=NAME, role=ROLE)

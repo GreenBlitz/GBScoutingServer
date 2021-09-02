@@ -21,7 +21,7 @@ def get_team_data():
         return 'Access denied, you not the coach', 401
 
     select = ''
-    for key in game_rules.keys():
+    for key in game_rules_2020.keys():
         select += f'{key},'
 
     select = select[:-1] + ' '
@@ -30,4 +30,4 @@ def get_team_data():
     if team_data == None:
         return 'How do u want to get data before any game scoured, go shout on ur scouters', 503
 
-    return jsonify(dict(zip(game_rules.keys(), team_data)))
+    return jsonify(dict(zip(game_rules_2020.keys(), team_data)))

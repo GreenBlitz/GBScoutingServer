@@ -8,8 +8,10 @@ import json
 @server.route('/scouter/send', methods=['GET', 'POST'])
 def add_data():
     params = json.loads(request.args.get('json').replace('%22', '"'))
-    id = params["id"]
+    print(f"PARAMS: {params}  + {type(params)}")
+    id = params["uid"]
     password = params["psw"]
+
     try:
         conn = sqlite3.connect("Server.db")
         curs = conn.cursor()
@@ -31,7 +33,7 @@ def add_data():
                 sql1 = "INSERT INTO team_game (id, team"
                 curs.execute("SELECT MAX(id) FROM team")
                 sql2 = f") VALUES (?, ?"
-                data = [(curs.fetchone()[0] if curs.rowcount != 0 else 0) + 1, params['team']]
+                data =[(curs.fetchone()[0] if curs.rowcount != 0 else 0) + 1, params['team']]
                 for name in list(map(lambda x: params[x].overview_types(x), game_rules_2020.keys())):
                     sql1 += f", {name}"
                     sql2 += ', ?'

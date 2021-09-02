@@ -5,6 +5,7 @@ from utils import data_types
 PIN = ''
 NAME = ''
 ROLE = ''
+ID = 0
 
 game_rules_2020 = {
     "auto_balls": data_types.Countable,
@@ -54,6 +55,8 @@ try:
 except sqlite3.Error as e:
     print(e)
 
+
+
 from flask import Flask
 
 server = Flask(__name__)
@@ -63,3 +66,4 @@ from app import admin_views
 from app import auth_views
 from app import scouter_views
 from app import coach_views
+from app import general_views
