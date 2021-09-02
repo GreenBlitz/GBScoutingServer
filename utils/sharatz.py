@@ -2,8 +2,10 @@ from pyautogui import hotkey, write
 import socket
 import time
 import os
+from pathlib import Path
 
-PATH = 'PycharmProjects\GBScoutingServer'
+home = str(Path.home())
+PATH = f'{home}\PycharmProjects\GBScoutingServer'
 APP = 'run.py'
 ENV = 'development'
 HOST = socket.gethostbyname(socket.gethostname())
