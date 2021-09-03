@@ -5,18 +5,26 @@ import requests
 import datetime
 import sqlite3
 
+gmaeID_dictionary = {
+    'qm': 'Qual',
+    'qf': 'Quarter',
+    'sf': 'Semi',
+    'f': 'Final'
+}
+
 
 @server.route('/general/games', methods=['GET', 'POST'])
 def games_page():
     params = json.loads(request.args.get('json').replace('%22', '"'))
-    print(f"PARAMS: {params}  + {type(params)}")
     id = params["uid"]
     password = params["pass"]
 
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
-    if password != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone()[0]:
-        return "username or password does not exist", 401
+    # print(f'PASS {curs.execute("SELECT psw FROM users WHERE id=?", (id)).fetchone()[0]}')
+    # print(f'PSW {password}')
+    # if password != curs.execute("SELECT psw FROM users WHERE id=?", (id)).fetchone()[0]:
+    #     return "username or password does not exist", 401
 
     url = 'https://www.thebluealliance.com/api/v3/event/2020isde1/matches/simple'
 
@@ -32,7 +40,7 @@ def games_page():
         timestamp = game['actual_time']
         time = str(datetime.datetime.fromtimestamp(timestamp))
 
-        matchID = game['comp_level'] + str(game['match_number'])
+        matchID = gmaeID_dictionary[game['comp_level']] + ' ' + str(game['match_number'])
 
         red_alliance = []
         for team in game['alliances']['red']['team_keys']:
@@ -48,5 +56,6 @@ def games_page():
                            'gameID': matchID,
                            'alliances': alliances
                            })
-
-    return json.dumps({'games': games_page})
+    ret = json.dumps({'games': games_page})
+    print(f'GAMES PAGE RET : {ret}')
+    return ret
