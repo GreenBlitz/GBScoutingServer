@@ -7,6 +7,7 @@ import json
 @server.route('/coach/team', methods=['GET'])
 def get_team_data():
     params = json.loads(request.args.get('json').replace('%22', '"'))
+    print("OREL:", params)
     id = params.get('id')
     psw = params.get('psw')
     team_number = int(params.get('team'))
@@ -14,10 +15,10 @@ def get_team_data():
     conn = sqlite3.connect('Server.db')
     curs = conn.cursor()
 
-    if psw != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone()[0]:
+    if psw != curs.execute("SELECT psw FROM users WHERE id=?", (id,)).fetchone()[0]:
         return 'username or password does not exist', 401
 
-    if 'coach' != curs.execute("SELECT role FROM users WHERE id=?", id).fetchone()[0]:
+    if 'coach' != curs.execute("SELECT role FROM users WHERE id=?", (id,)).fetchone()[0]:
         return 'Access denied, you not the coach', 401
 
     select = ''
