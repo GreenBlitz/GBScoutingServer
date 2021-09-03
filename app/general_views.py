@@ -57,5 +57,4 @@ def games_page():
                            'alliances': alliances
                            })
     ret = json.dumps({'games': games_page})
-    print(f'GAMES PAGE RET : {ret}')
     return ret
