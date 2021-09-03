@@ -2,11 +2,11 @@ from app import server
 from app import game_rules_2020
 from flask import request, jsonify
 import sqlite3
-
+import json
 
 @server.route('/coach/team', methods=['GET'])
 def get_team_data():
-    params = request.args
+    params = json.loads(request.args.get('json').replace('%22', '"'))
     id = params.get('id')
     psw = params.get('psw')
     team_number = int(params.get('team'))
