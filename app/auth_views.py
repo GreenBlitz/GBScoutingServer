@@ -9,7 +9,7 @@ MASTER_PASS_HASHED = "8c8f7c9c5b2194fb60ac6f8847bfe9145a67a006245f39ee8a8901ae77
 
 
 @server.route('/auth/add', methods=['GET', 'POST'])
-def register_user():
+def add():
     global PIN
     global NAME
     global ROLE
@@ -24,7 +24,7 @@ def register_user():
 
 
 @server.route('/auth/register', methods=['GET', 'POST'])
-def register_from_device():
+def register():
     global NAME
     global ROLE
     global PIN
@@ -59,3 +59,23 @@ def register_from_device():
     conn.close()
 
     return jsonify(uid=ID, name=NAME, role=ROLE)
+
+
+@server.route('/auth/login', methods=['GET', 'POST'])
+def login():
+    params = json.loads(request.args.get('json').replace('%22', '"'))
+    print(params)
+    uid = params['uid']
+    psw = params['pass']
+
+    conn = sqlite3.connect('Server.db')
+    curs = conn.cursor()
+
+    if psw != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone()[0]:
+        return 'username or password does not exist', 404
+
+    data = (id, psw)
+
+    name, role = curs.execute("SELECT name, role FROM users WHERE id=? AND psw=?", data)
+
+    return json.dumps({'name': name, 'role': role, 'success': True})
