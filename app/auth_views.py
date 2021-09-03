@@ -72,7 +72,7 @@ def login():
     curs = conn.cursor()
 
     if psw != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone()[0]:
-        return 'username or password does not exist', 404
+        return json.dumps({'name': None, 'role': None, 'success': False})
 
     data = (id, psw)
 
