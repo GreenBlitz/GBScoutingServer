@@ -5,10 +5,10 @@ class Countable:
         self.max = cmax
 
     def add(self, num):
-        self.avg = self.avg*self.amount + num
+        self.avg = self.avg * self.amount + num
         self.amount += 1
-        self.max = num if self.max<num else self.max
-        self.avg = self.avg/self.amount
+        self.max = num if self.max < num else self.max
+        self.avg = self.avg / self.amount
 
     def split(self, name):
         return f"{name}_avg", self.avg, f"{name}_amount", self.amount, f"{name}_max", self.max
@@ -26,20 +26,20 @@ class Countable:
 
     @staticmethod
     def recreate(name, cursor, table, where):
-        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}")
-        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}")
-        max = cursor.execute(f"SELECT {name}_max FROM {table} WHERE {where}")
+        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}").fetchall()[0][0]
+        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}").fetchall()[0][0]
+        max = cursor.execute(f"SELECT {name}_max FROM {table} WHERE {where}").fetchall()[0][0]
         return Countable(amount, avg, max)
 
 
 class Boolean:
     def __init__(self, amount=0, avg=0, last=0):
         self.amount = amount
-        self.avg = avg*100
+        self.avg = avg * 100
         self.last = last
 
     def add(self, num):
-        self.avg = self.avg * self.amount + num*100
+        self.avg = self.avg * self.amount + num * 100
         self.amount += 1
         self.last = num
         self.avg = self.avg / self.amount
@@ -60,13 +60,12 @@ class Boolean:
 
     @staticmethod
     def recreate(name, cursor, table, where):
-        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}")
-        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}")
-        last = cursor.execute(f"SELECT {name}_last FROM {table} WHERE {where}")
+        amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}").fetchall()[0][0]
+        avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}").fetchall()[0][0]
+        last = cursor.execute(f"SELECT {name}_last FROM {table} WHERE {where}").fetchall()[0][0]
         return Boolean(amount, avg, last)
 
-
-#class MetaData:
+# class MetaData:
 #    def __init__(self, team, win=0, amount=0, comments=[], game_list=[]):
 #        self.team = team
 #        self.win = win
@@ -85,6 +84,3 @@ class Boolean:
 #
 #     def split(self):
 #         return self.team, self.amount, self.amount, self.comments, self.game_list
-
-
-
