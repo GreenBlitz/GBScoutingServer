@@ -55,8 +55,10 @@ def register():
             VALUES(?,?,?,?)                   
         """, data)
 
+    print(curs.execute("select id, name, role, psw from users").fetchall())
     conn.commit()
     conn.close()
+
 
     return jsonify(uid=ID, name=NAME, role=ROLE)
 

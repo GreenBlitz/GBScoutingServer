@@ -2,11 +2,12 @@ from app import server
 from app import game_rules_2020
 from flask import request, jsonify
 import sqlite3
-import json
+from json import loads
+import re
 
 @server.route('/coach/team', methods=['GET'])
 def get_team_data():
-    params = json.loads(request.args.get('json').replace('%22', '"'))
+    params = loads(request.args.get('json').replace('%22', '"'))
     print("OREL:", params)
     id = params.get('id')
     psw = params.get('psw')
@@ -22,13 +23,20 @@ def get_team_data():
         return 'Access denied, you not the coach', 401
 
     select = ''
+    categories = re.compile("([a-zA-Z_0-9]+) ")
     for key in game_rules_2020.keys():
-        select += f'{key},'
+        select += f'{game_rules_2020[key].overview_types(key)},'
 
-    select = select[:-1] + ' '
+    # select = ", ".join(categories.findall(select))
 
-    team_data = curs.execute(f'SELECT {select} FROM team WHERE team={team_number}').fetchone()
+    print("NIGGA:", categories.findall(select)[0])
+    print("NIGGGA:", curs.execute(f'SELECT {categories.findall(select)[0]} FROM team').fetchall())
+    team_data = curs.execute(f'SELECT {list(categories.finditer(select))[0]} FROM team WHERE team={team_number}')
+    print(team_data.fetchall())
+    team_data = team_data.fetchone()[0]
     if team_data == None:
         return 'How do u want to get data before any game scoured, go shout on ur scouters', 503
 
-    return jsonify(dict(zip(game_rules_2020.keys(), team_data)))
+    json = jsonify(dict(zip(game_rules_2020.keys(), team_data)))
+    print(json)
+    return json

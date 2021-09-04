@@ -38,6 +38,8 @@ try:
                 comments text"""
 
     for key in game_rules_2020.keys():
+        print("game rules: ", game_rules_2020[key])
+        print("game rules type: ", game_rules_2020[key].this_type(key), "\n")
         sql += ',\n' + game_rules_2020[key].this_type(key)
     sql += ');'
     curs.execute(sql)
