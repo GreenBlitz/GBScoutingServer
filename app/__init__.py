@@ -7,6 +7,10 @@ NAME = ''
 ROLE = ''
 ID = 0
 
+DB_PATH = r'C:\Users\orlav\PycharmProjects\GBScoutingServer\Server.db'
+
+EVENT_KEY = '2019isde1'
+
 game_rules_2020 = {
     "auto_balls": data_types.Countable,
     "tele_balls": data_types.Countable,

@@ -1,9 +1,12 @@
-from app import server
+from app import server, DB_PATH, EVENT_KEY
 from app import game_rules_2020
 from flask import request, jsonify
 import sqlite3
-from json import loads
+from json import loads, dumps
 import re
+
+from utils.tba_api import *
+
 
 @server.route('/coach/team', methods=['GET'])
 def get_team_data():
@@ -11,15 +14,17 @@ def get_team_data():
     print("OREL:", params)
     id = params.get('id')
     psw = params.get('psw')
-    team_number = int(params.get('team'))
+    team_number = params.get('team')
 
-    conn = sqlite3.connect('Server.db')
+    conn = sqlite3.connect(DB_PATH)
     curs = conn.cursor()
 
     if psw != curs.execute("SELECT psw FROM users WHERE id=?", (id,)).fetchone()[0]:
+        print('COACH ERROR: username or password does not exist')
         return 'username or password does not exist', 401
 
     if 'coach' != curs.execute("SELECT role FROM users WHERE id=?", (id,)).fetchone()[0]:
+        print('COACH ERROR: Access denied, you not the coach')
         return 'Access denied, you not the coach', 401
 
     select = ''
@@ -27,16 +32,33 @@ def get_team_data():
     for key in game_rules_2020.keys():
         select += f'{game_rules_2020[key].overview_types(key)},'
 
-    # select = ", ".join(categories.findall(select))
+    team_data = \
+        curs.execute(f'SELECT {", ".join(categories.findall(select))} FROM team WHERE team={team_number}').fetchall()[0]
 
-    print("NIGGA:", categories.findall(select)[0])
-    print("NIGGGA:", curs.execute(f'SELECT {categories.findall(select)[0]} FROM team').fetchall())
-    team_data = curs.execute(f'SELECT {list(categories.finditer(select))[0]} FROM team WHERE team={team_number}')
-    print(team_data.fetchall())
-    team_data = team_data.fetchone()[0]
-    if team_data == None:
-        return 'How do u want to get data before any game scoured, go shout on ur scouters', 503
+    if not team_data:
+        return 'How do u want to get data before any game scoured, go shout at ur scouters', 503
 
-    json = jsonify(dict(zip(game_rules_2020.keys(), team_data)))
-    print(json)
-    return json
+    data_dict = dict(zip(categories.findall(select), team_data))
+    data_dict['comments'] = ''
+
+    rank = get_rank(EVENT_KEY, str(team_number))
+    alliance = get_alliance(EVENT_KEY, str(team_number))
+
+    if not alliance:
+        data_dict['ranking_or_alliance'] = str(rank)
+    else:
+        data_dict['ranking_or_alliance'] = alliance['name']
+
+    win_rate = get_wins(EVENT_KEY, str(team_number))
+
+    data_dict['win_rate'] = win_rate * 100
+
+    data_dict['color_wheel_1_avg'] *= 100
+    data_dict['color_wheel_2_avg'] *= 100
+    data_dict['climb_avg'] *= 100
+
+    data_dict['games'] = ['qual1', 'qual2', 'final1']
+
+    json_data = dumps(data_dict)
+    print(f'ASAFFFFFFFFF: {json_data}')
+    return json_data
