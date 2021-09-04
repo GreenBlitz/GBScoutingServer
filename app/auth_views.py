@@ -59,25 +59,25 @@ def register():
     conn.commit()
     conn.close()
 
-
     return jsonify(uid=ID, name=NAME, role=ROLE)
 
 
 @server.route('/auth/login', methods=['GET', 'POST'])
 def login():
     params = json.loads(request.args.get('json').replace('%22', '"'))
-    print(params)
     uid = params['uid']
     psw = params['pass']
 
     conn = sqlite3.connect('Server.db')
     curs = conn.cursor()
 
-    if psw != curs.execute("SELECT psw FROM users WHERE id=?", id).fetchone()[0]:
+    if psw != curs.execute("SELECT psw FROM users WHERE id=?", (uid,)).fetchone()[0]:
+        print(json.dumps({'name': None, 'role': None, 'success': False}))
         return json.dumps({'name': None, 'role': None, 'success': False})
 
-    data = (id, psw)
+    data = (uid, psw)
 
-    name, role = curs.execute("SELECT name, role FROM users WHERE id=? AND psw=?", data)
+    name, role = curs.execute("SELECT name, role FROM users WHERE id=? AND psw=?", data).fetchall()[0]
 
+    print(json.dumps({'name': name, 'role': role, 'success': True}))
     return json.dumps({'name': name, 'role': role, 'success': True})

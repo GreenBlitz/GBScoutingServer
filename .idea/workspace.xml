@@ -4,11 +4,8 @@
     <list default="true" id="e3ba4028-aeb1-498f-ba96-7367bd2bbafd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server.db" beforeDir="false" afterPath="$PROJECT_DIR$/Server.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Server.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/scouter_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/scouter_views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/Server.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/data_types.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/data_types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/admin_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/auth_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/auth_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
