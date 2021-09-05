@@ -11,7 +11,6 @@ from utils.tba_api import *
 @server.route('/coach/team', methods=['GET'])
 def get_team_data():
     params = loads(request.args.get('json').replace('%22', '"'))
-    print("OREL:", params)
     id = params.get('id')
     psw = params.get('psw')
     team_number = params.get('team')
@@ -20,11 +19,9 @@ def get_team_data():
     curs = conn.cursor()
 
     if psw != curs.execute("SELECT psw FROM users WHERE id=?", (id,)).fetchone()[0]:
-        print('COACH ERROR: username or password does not exist')
         return 'username or password does not exist', 401
 
     if 'coach' != curs.execute("SELECT role FROM users WHERE id=?", (id,)).fetchone()[0]:
-        print('COACH ERROR: Access denied, you not the coach')
         return 'Access denied, you not the coach', 401
 
     select = ''
@@ -60,5 +57,4 @@ def get_team_data():
     data_dict['games'] = ['qual1', 'qual2', 'final1']
 
     json_data = dumps(data_dict)
-    print(f'ASAFFFFFFFFF: {json_data}')
     return json_data

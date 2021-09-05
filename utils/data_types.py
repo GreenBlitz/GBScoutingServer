@@ -29,6 +29,7 @@ class Countable:
         amount = cursor.execute(f"SELECT {name}_amount FROM {table} WHERE {where}").fetchall()[0][0]
         avg = cursor.execute(f"SELECT {name}_avg FROM {table} WHERE {where}").fetchall()[0][0]
         max = cursor.execute(f"SELECT {name}_max FROM {table} WHERE {where}").fetchall()[0][0]
+
         return Countable(amount, avg, max)
 
 

@@ -19,7 +19,6 @@ def add():
     ROLE = params.get('role')
 
     PIN = str(random.randint(10000, 99999))
-    print(PIN)
     return fr"{NAME} the {ROLE}'s PIN is: {PIN}"
 
 
@@ -30,11 +29,9 @@ def register():
     global PIN
 
     params = json.loads(request.args.get('json').replace('%22', '"'))
-    print(params)
     pin = params['PIN']
     psw = params['pass']
 
-    print(f'PIN {PIN}, pin {pin}')
 
     if PIN != pin:
         return f'PIN was incorrect (Original PIN was {PIN}', 401
@@ -45,17 +42,14 @@ def register():
 
     data = curs.fetchone()
 
-    print(f'DATA: {data}')
 
     ID = (data[0] + 1 if data[0] else 1)
     data = ID, NAME, ROLE, psw
-    print('(id role name psw ) ', data)
     curs.execute("""
             INSERT INTO users(id, name, role, psw)
             VALUES(?,?,?,?)                   
         """, data)
 
-    print(curs.execute("select id, name, role, psw from users").fetchall())
     conn.commit()
     conn.close()
 
@@ -72,12 +66,10 @@ def login():
     curs = conn.cursor()
 
     if psw != curs.execute("SELECT psw FROM users WHERE id=?", (uid,)).fetchone()[0]:
-        print(json.dumps({'name': None, 'role': None, 'success': False}))
         return json.dumps({'name': None, 'role': None, 'success': False})
 
     data = (uid, psw)
 
     name, role = curs.execute("SELECT name, role FROM users WHERE id=? AND psw=?", data).fetchall()[0]
 
-    print(json.dumps({'name': name, 'role': role, 'success': True}))
     return json.dumps({'name': name, 'role': role, 'success': True})
