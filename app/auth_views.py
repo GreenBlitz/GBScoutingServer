@@ -29,7 +29,8 @@ def register():
     global PIN
 
     params = json.loads(request.args.get('json').replace('%22', '"'))
-    pin = params['PIN']
+
+    pin = params['PIN']  # pin is string
     psw = params['pass']
 
 

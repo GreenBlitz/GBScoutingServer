@@ -12,7 +12,7 @@ def admin():
 @server.route('/self/destruct/button')
 def self_destruct():
     psw = sha256(request.args.get('sequence').encode()).hexdigest()
-    if psw == '7577076447538d8a36c165212eefe9384740321914889fbe7e760cebf06199ab':
+    if psw == '7577076447538d8a36c165212eefe384740321914889fbe7e760cebf06199ab': #why!!!!!!!!!!!
         conn = sqlite3.connect('Server.db')
         curs = conn.cursor()
         curs.execute('DELETE FROM users')

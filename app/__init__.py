@@ -1,23 +1,22 @@
 import sqlite3
 
-from utils import data_types
 
 PIN = ''
 NAME = ''
 ROLE = ''
 ID = 0
 
-DB_PATH = r'C:\Users\orlav\PycharmProjects\GBScoutingServer\Server.db'
 
 EVENT_KEY = '2019isde1'
 
 game_rules_2020 = {
-    "auto_balls": data_types.Countable,
-    "tele_balls": data_types.Countable,
-    "cycles": data_types.Countable,
-    "color_wheel_1": data_types.Boolean,
-    "color_wheel_2": data_types.Boolean,
-    "climb": data_types.Boolean
+    "auto_balls": "INTEGER",  # numeric
+    "tele_balls": "INTEGER",
+    "cycles": "INTEGER",
+
+    "color_wheel_1": "INTEGER",  # boolean expressed as 0 or 1
+    "color_wheel_2": "INTEGER",
+    "climb": "INTEGER"
 }
 
 conn = curs = None
@@ -44,15 +43,7 @@ try:
     for key in game_rules_2020.keys():
         # print("game rules: ", game_rules_2020[key])
         # print("game rules type: ", game_rules_2020[key].this_type(key), "\n")
-        sql += ',\n' + game_rules_2020[key].this_type(key)
-    sql += ');'
-    curs.execute(sql)
-    sql = """ CREATE TABLE if not exists team(
-                id integer PRIMARY KEY,
-                team integer"""
-
-    for key in game_rules_2020.keys():
-        sql += ',\n' + game_rules_2020[key].overview_types(key) + ' '
+        sql += ',\n' + key +" " +  game_rules_2020[key]
     sql += ');'
     curs.execute(sql)
 
