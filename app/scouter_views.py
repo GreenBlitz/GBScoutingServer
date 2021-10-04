@@ -18,8 +18,11 @@ def add_data():
 
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
-    if password != curs.execute("SELECT psw FROM users WHERE id=?", (id,)).fetchone()[0]:
-        return "username or password does not exist", 401
+    real_pass = curs.execute("SELECT psw FROM users WHERE id=?", (id,)).fetchone()
+    if not real_pass:
+        return f"user does not exist id = {id}", 401
+    if password != real_pass[0]:
+        return "password is incorrect", 401
     if 'scouter' != curs.execute("SELECT role FROM users WHERE id=?", (id,)).fetchone()[0]:
         return 'Access denied, you not the scouter', 401
 

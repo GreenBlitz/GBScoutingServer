@@ -18,8 +18,11 @@ def add():
     NAME = params.get('uname')
     ROLE = params.get('role')
 
+    if not NAME or not ROLE:
+        return "please enter name and role of new user", 401
+
     PIN = str(random.randint(10000, 99999))
-    return fr"{NAME} the {ROLE}'s PIN is: {PIN}"
+    return fr"{NAME} the {ROLE}'s PIN is: {PIN}", 200
 
 
 @server.route('/auth/register', methods=['GET', 'POST'])
@@ -33,16 +36,16 @@ def register():
     pin = params['PIN']  # pin is string
     psw = params['pass']
 
-
     if PIN != pin:
         return f'PIN was incorrect (Original PIN was {PIN}', 401
+    if not psw:
+        return "please set a psw for user", 401
 
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
     curs.execute('SELECT MAX(id) from users')
 
     data = curs.fetchone()
-
 
     ID = (data[0] + 1 if data[0] else 1)
     data = ID, NAME, ROLE, psw
@@ -54,7 +57,7 @@ def register():
     conn.commit()
     conn.close()
 
-    return jsonify(uid=ID, name=NAME, role=ROLE)
+    return jsonify(uid=ID, name=NAME, role=ROLE), 200
 
 
 @server.route('/auth/login', methods=['GET', 'POST'])
@@ -66,11 +69,14 @@ def login():
     conn = sqlite3.connect('Server.db')
     curs = conn.cursor()
 
-    if psw != curs.execute("SELECT psw FROM users WHERE id=?", (uid,)).fetchone()[0]:
-        return json.dumps({'name': None, 'role': None, 'success': False})
+    real_pass = curs.execute("SELECT psw FROM users WHERE id=?", (uid,)).fetchone()
+    if not real_pass:
+        return json.dumps({'name': None, 'role': None, 'success': False}), 401
+    if psw != real_pass[0]:
+        return json.dumps({'name': None, 'role': None, 'success': False}), 503
 
     data = (uid, psw)
 
     name, role = curs.execute("SELECT name, role FROM users WHERE id=? AND psw=?", data).fetchall()[0]
 
-    return json.dumps({'name': name, 'role': role, 'success': True})
+    return json.dumps({'name': name, 'role': role, 'success': True}), 200

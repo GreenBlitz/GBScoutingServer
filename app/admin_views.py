@@ -6,7 +6,7 @@ import sqlite3
 
 @server.route('/admin')
 def admin():
-    return 'GBAdmin'  # render_template('admin/admin.html')
+    return 'GBAdmin', 200  # render_template('admin/admin.html')
 
 
 @server.route('/self/destruct/button')

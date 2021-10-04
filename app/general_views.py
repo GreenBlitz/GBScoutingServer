@@ -1,9 +1,11 @@
 from flask import request, jsonify
-from app import server
+from app import server, EVENT_KEY
 import json
 import requests
 import datetime
 import sqlite3
+
+from utils.tba_api import get_games
 
 gmaeID_dictionary = {
     'qm': 'Qual',
@@ -26,17 +28,14 @@ def games_page():
     # if password != curs.execute("SELECT psw FROM users WHERE id=?", (id)).fetchone()[0]:
     #     return "username or password does not exist", 401
 
-    url = 'https://www.thebluealliance.com/api/v3/event/2020isde1/matches/simple'
-
-    headers = {'X-TBA-Auth-Key': 't6zONXbDuKDLpR6kXrId4Qluy0Gv8II95GgOzcHp8WHoxS5Gi68B3iKydHp3mfml'}
-
-    j = requests.get(url, headers=headers).json()
-
-    j = sorted(j, key=lambda k: k['actual_time'])
+    games = get_games(EVENT_KEY)
+    if games[0] == -1:
+        return "error from tba api", 502
+    sort = sorted(games, key=lambda k: k['actual_time'])
 
     games_page = []
 
-    for game in j:
+    for game in sort:
         timestamp = game['actual_time']
         time = str(datetime.datetime.fromtimestamp(timestamp))
 
@@ -57,4 +56,4 @@ def games_page():
                            'alliances': alliances
                            })
     ret = json.dumps({'games': games_page})
-    return ret
+    return ret, 200
