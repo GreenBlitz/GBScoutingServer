@@ -57,6 +57,8 @@ except sqlite3.Error as e:
 from flask import Flask
 
 server = Flask(__name__)
+server.config['ENV'] = 'development'
+# server.config['TESTING'] = True
 
 from app import views
 from app import admin_views

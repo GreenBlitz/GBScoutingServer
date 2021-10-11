@@ -56,8 +56,9 @@ def register():
 
     conn.commit()
     conn.close()
-
-    return jsonify(uid=ID, name=NAME, role=ROLE), 200
+    ret =jsonify(uid=ID, name=NAME, role=ROLE)
+    print(ret.json)
+    return ret
 
 
 @server.route('/auth/login', methods=['GET', 'POST'])
