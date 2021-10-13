@@ -130,5 +130,6 @@ dmypy.json
 
 # Orel's additions' pleas check before run
 .idea/workspace.xml
+.idea/
 
 Server.db

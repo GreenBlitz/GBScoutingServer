@@ -47,6 +47,8 @@ def add_data():
 
         # curs.execute(sql, data)
 
+        # TODO if a game already exists in the db, change the existing game instead
+
         sql1 = "INSERT INTO team_game (id, timestamp, username"
         sql2 = f") VALUES (?, ?, ?"
         current_data = curs.execute("SELECT MAX(id) FROM team_game").fetchone()[0]
@@ -55,7 +57,7 @@ def add_data():
 
                 curs.execute("SELECT name FROM users WHERE id=?", (id,)).fetchone()[0]]
         for key in list(params.keys()):
-            sql1 += f", {key}"
+            sql1 += f", {key}"  # TODO: this is not sql injection proof, pls fix (or better yet, use sql alchemy)
             sql2 += f", ?"
             data.append(params[key])
         sql = sql1 + sql2 + ');'
