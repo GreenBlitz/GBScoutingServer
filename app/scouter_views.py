@@ -47,11 +47,10 @@ def add_data():
 
         # curs.execute(sql, data)
 
-        sql1 = "INSERT INTO team_game (id, timestamp, username"
+        sql1 = "INSERT INTO team_game (id,  username"
         sql2 = f") VALUES (?, ?, ?"
         current_data = curs.execute("SELECT MAX(id) FROM team_game").fetchone()[0]
         data = [(current_data + 1 if current_data else 1),
-                curs.execute("SELECT datetime('now', 'localtime')").fetchone()[0],
 
                 curs.execute("SELECT name FROM users WHERE id=?", (id,)).fetchone()[0]]
         for key in list(params.keys()):

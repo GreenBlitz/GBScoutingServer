@@ -34,8 +34,8 @@ try:
 
     sql = """ CREATE TABLE if not exists team_game(
                 id integer PRIMARY KEY,
-                timestamp datetime,
                 username text,
+                timestamp datetime,
                 game text,
                 team integer,
                 comments text"""

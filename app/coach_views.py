@@ -17,6 +17,7 @@ def get_team_data():
     id = params['id']
     psw = params['psw']
     team_number = params.get['team']
+    min_game = params.get['min_game']
 
     conn = sqlite3.connect("Server.db")
     curs = conn.cursor()
@@ -36,10 +37,11 @@ def get_team_data():
         select += f'AVG({key}),'
     select = select[:-1]
 
-    team_data = curs.execute(f"SELECT {select} FROM team_game WHERE team=?", (team_number, )).fetchall()  # TODO add condition for game range
+    team_data = curs.execute(f"SELECT {select} FROM team_game WHERE team=?", (team_number, )).fetchall()
     if not team_data:
         return 'How do u want to get data before any game scoured, go shout at ur scouters', 503
-    team_data = team_data[0]
+    team_data = team_data[0] #TODO check if stupid
+    team_data = are_games_after(min_game,team_data)
     data_dict = dict(zip(game_rules_2020.keys(), team_data))
 
     # tba api data
